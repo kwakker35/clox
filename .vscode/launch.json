@@ -1,0 +1,67 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run clox (REPL)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/clox",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "preLaunchTask": "build (debug)"
+    },
+    {
+      "name": "Run clox (script)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/clox",
+      "args": ["${file}"],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "preLaunchTask": "build (debug)"
+    },
+    {
+      "name": "Debug clox (REPL)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/clox",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "build (debug)"
+    },
+    {
+      "name": "Debug clox (script)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/clox",
+      "args": ["${file}"],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "build (debug)"
+    }
+  ]
+}
