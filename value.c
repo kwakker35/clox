@@ -14,7 +14,7 @@ void initValueArray(ValueArray *array)
 
 void writeValueArray(ValueArray *array, Value value)
 {
-  if (array->capacity < array->capacity + 1)
+  if (array->capacity < array->count + 1)
   {
     int oldCapacity = array->capacity;
     array->capacity = GROW_CAPACITY(oldCapacity);
@@ -40,8 +40,10 @@ void printValue(Value value)
     break;
   case VAL_NIL:
     printf("nil");
+    break;
   case VAL_NUMBER:
     printf("%g", AS_NUMBER(value));
+    break;
   case VAL_OBJ:
     printObject(value);
     break;
@@ -62,10 +64,12 @@ bool valuesEqual(Value a, Value b)
   case VAL_NUMBER:
     return AS_NUMBER(a) == AS_NUMBER(b);
   case VAL_OBJ:
+  {
     ObjString *aString = AS_STRING(a);
     ObjString *bString = AS_STRING(b);
     return aString->length == bString->length &&
            memcmp(aString->chars, bString->chars, aString->length) == 0;
+  }
   default:
     return false; // unreachable
   }

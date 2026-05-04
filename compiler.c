@@ -42,11 +42,11 @@ typedef struct
 } ParseRule;
 
 Parser parser;
-Chunk *complilingChunk;
+Chunk *compilingChunk;
 
 static Chunk *currentChunk()
 {
-  return complilingChunk;
+  return compilingChunk;
 }
 
 static void errorAt(Token *token, const char *message)
@@ -76,7 +76,7 @@ static void errorAt(Token *token, const char *message)
 
 static void error(const char *message)
 {
-  errorAt(&parser.current, message);
+  errorAt(&parser.previous, message);
 }
 
 static void errorAtCurrent(const char *message)
@@ -332,7 +332,7 @@ static void expression()
 bool compile(const char *source, Chunk *chunk)
 {
   initScanner(source);
-  complilingChunk = chunk;
+  compilingChunk = chunk;
 
   parser.hadError = false;
   parser.panicMode = false;

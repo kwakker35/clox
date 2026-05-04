@@ -11,7 +11,7 @@
 
 VM vm;
 
-static resetStack()
+static void resetStack()
 {
   vm.stackTop = vm.stack;
 }
@@ -87,7 +87,7 @@ static InterpretResult run()
     if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) \
     {                                               \
       runtimeError("Operands must be numbers.");    \
-      return INTERPERET_RUNTIME_ERROR;              \
+      return INTERPRET_RUNTIME_ERROR;               \
     }                                               \
     double b = AS_NUMBER(pop());                    \
     double a = AS_NUMBER(pop());                    \
@@ -99,7 +99,7 @@ static InterpretResult run()
 
 #ifdef DEBUG_TRACE_EXECUTION
     printf("          ");
-    for (Value *slot = vm.stack; slot < vm.stackTop - 1; slot++)
+    for (Value *slot = vm.stack; slot < vm.stackTop; slot++)
     {
       printf("[ ");
       printValue(*slot);
@@ -128,10 +128,12 @@ static InterpretResult run()
       push(BOOL_VAL(false));
       break;
     case OP_EQUAL:
+    {
       Value b = pop();
       Value a = pop();
       push(BOOL_VAL(valuesEqual(a, b)));
       break;
+    }
     case OP_GREATER:
       BINARY_OP(BOOL_VAL, >);
       break;
@@ -151,8 +153,8 @@ static InterpretResult run()
       }
       else
       {
-        runtimeError("Operands must be two number or two strings.");
-        return INTERPERET_RUNTIME_ERROR;
+        runtimeError("Operands must be two numbers or two strings.");
+        return INTERPRET_RUNTIME_ERROR;
       }
       break;
     case OP_SUBTRACT:
@@ -171,7 +173,7 @@ static InterpretResult run()
       if (!IS_NUMBER(peek(0)))
       {
         runtimeError("Operand must be a number.");
-        return INTERPERET_RUNTIME_ERROR;
+        return INTERPRET_RUNTIME_ERROR;
       }
       push(NUMBER_VAL(-AS_NUMBER(pop())));
       break;
@@ -179,7 +181,7 @@ static InterpretResult run()
     {
       printValue(pop());
       printf("\n");
-      return INTERPERET_OK;
+      return INTERPRET_OK;
     }
     }
   }
@@ -197,12 +199,13 @@ InterpretResult interpret(const char *source)
   if (!compile(source, &chunk))
   {
     freeChunk(&chunk);
-    return INTERPERET_COMPILE_ERROR;
+    return INTERPRET_COMPILE_ERROR;
   }
 
   vm.chunk = &chunk;
   vm.ip = vm.chunk->code;
 
   InterpretResult result = run();
+  freeChunk(&chunk);
   return result;
 }
